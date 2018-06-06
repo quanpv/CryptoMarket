@@ -38,4 +38,6 @@ class CryptoCoin {
     @SerializedName("last_updated")
     val last_updated: String? = null
 
+    var quickSearchID: Int? = null
+
 }

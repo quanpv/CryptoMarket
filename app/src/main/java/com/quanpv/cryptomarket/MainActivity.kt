@@ -19,6 +19,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         openPage(HomeFragment.newInstance(), false)
 //        requestAllCoin()
+        val param: Map<String, String> = hashMapOf("limit" to "0")
+        CryptoService.requestAllCoin(param) {
+            onNext {
+                handleSuccessAllCoin(it)
+            }
+            onError {
+                Log.e(TAG, "handlerErrorAndroidVersion: ${it.localizedMessage}")
+            }
+        }
     }
 
 

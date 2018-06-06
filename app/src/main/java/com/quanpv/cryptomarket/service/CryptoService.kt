@@ -1,5 +1,11 @@
 package com.quanpv.cryptomarket.service
 
+import com.quanpv.cryptomarket.model.CMCQuickSearch
+import com.quanpv.cryptomarket.model.CryptoCoin
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -13,10 +19,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CryptoService {
 
     companion object {
+
+        val COIN_MARKETCAP_ALL_COINS_URL = "https://api.coinmarketcap.com/"
+        val COIN_MARKETCAP_CHART_URL_ALL_DATA = "https://graphs2.coinmarketcap.com/"
+        val COIN_MARKETCAP_CHART_URL_WINDOW = "https://graphs2.coinmarketcap.com/"
+        val COIN_MARKETCAP_QUICK_SEARCH_URL = "https://s2.coinmarketcap.com/"
+
         private var retrofit: Retrofit? = null
-        private var builder: Retrofit.Builder? = null /*= Retrofit.Builder().baseUrl("")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())*/
+        private var builder: Retrofit.Builder? = null
         private val httpClient = OkHttpClient.Builder()
         fun createService(baseUrl: String?): ApiService {
             builder = Retrofit.Builder().baseUrl(baseUrl!!)
@@ -38,6 +48,62 @@ class CryptoService {
 //            retrofit = builder?.build()
 //            return retrofit!!.create(ApiService::class.java)
 //        }
+
+
+        fun requestAllCoin(param: Map<String, String>, observer: KObserver<List<CryptoCoin>>.() -> Unit) {
+            CryptoService.createService(COIN_MARKETCAP_ALL_COINS_URL).getAllCoins(param)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(KObserver<List<CryptoCoin>>().apply(observer))
+        }
+
+        fun getQuickSearch(observer: KObserver<List<CMCQuickSearch>>.() -> Unit) {
+            CryptoService.createService(COIN_MARKETCAP_ALL_COINS_URL).getCMCQuickSearch()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(KObserver<List<CMCQuickSearch>>().apply(observer))
+        }
+
+    }
+
+    class KObserver<T> : Observer<T> {
+
+        private var onSubscribe: ((Disposable) -> Unit)? = null
+        private var onNext: ((T) -> Unit)? = null
+        private var onError: ((Throwable) -> Unit)? = null
+        private var onCompleted: (() -> Unit)? = null
+
+        override fun onSubscribe(d: Disposable) {
+            onSubscribe?.invoke(d)
+        }
+
+        override fun onNext(t: T) {
+            onNext?.invoke(t)
+        }
+
+        override fun onError(e: Throwable) {
+            onError?.invoke(e)
+        }
+
+        override fun onComplete() {
+            onCompleted?.invoke()
+        }
+
+        fun onSubscribe(function: (Disposable) -> Unit) {
+            this.onSubscribe = function
+        }
+
+        fun onNext(function: (T) -> Unit) {
+            this.onNext = function
+        }
+
+        fun onError(function: (Throwable) -> Unit) {
+            this.onError = function
+        }
+
+        fun onComplete(function: () -> Unit) {
+            this.onCompleted = function
+        }
 
     }
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
@@ -50,3 +51,44 @@ class KCallback : Callback {
         this.onError = function
     }
 }
+
+
+//public static void setPercentChangeTextView(TextView textView, String pctChange, String time,
+//String negativePercentStringResource, String positivePercentStringResource,
+//int negativeRedColor, int positiveGreenColor, String pctChangeNotAvailableStringResource) {
+//    if (pctChange == null) {
+//        textView.setText(String.format(pctChangeNotAvailableStringResource, time));
+//    } else {
+//        double change = Double.parseDouble(pctChange);
+//        if (change < 0) {
+//            textView.setText(String.format(negativePercentStringResource, time, change));
+//            textView.setTextColor(negativeRedColor);
+//        } else {
+//            textView.setText(String.format(positivePercentStringResource, time, change));
+//            textView.setTextColor(positiveGreenColor);
+//        }
+//    }
+//}
+
+
+fun TextView.setPercentChangeTextView(pctChange: String?, time: String, negativePercentStringResource: String, positivePercentStringResource: String,
+                                      negativeRedColor: Int, positiveGreenColor: Int, pctChangeNotAvailableStringResource: String) {
+
+    if (pctChange == null) {
+        this.text = String.format(pctChangeNotAvailableStringResource, time)
+    } else {
+        val change = pctChange.toDouble()
+        if (change < 0) {
+            this.text = String.format(negativePercentStringResource, time, change)
+            this.setTextColor(negativeRedColor)
+        } else {
+            this.text = String.format(positivePercentStringResource, time, change)
+            this.setTextColor(positiveGreenColor)
+        }
+    }
+
+}
+
+
+
+

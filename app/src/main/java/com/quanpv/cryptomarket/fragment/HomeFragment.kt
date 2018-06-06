@@ -9,7 +9,7 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.quanpv.cryptomarket.MainActivity
 import com.quanpv.cryptomarket.R
 import com.quanpv.cryptomarket.adapter.HomePagerAdapter
 import com.quanpv.cryptomarket.customview.TextDrawable
@@ -19,8 +19,18 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * Created by QuanPham on 5/31/18.
  */
 class HomeFragment : BaseFragment() {
-
+    /*   public static String IMAGE_URL_FORMAT = "https://s2.coinmarketcap.com/static/img/coins/32x32/%s.png";
+        public final static String DAY = "24h";
+        public final static String WEEK = "7d";
+        public final static String HOUR = "1h";
+        public final static String SORT_SETTING = "sort_setting";*/
     companion object {
+
+        val IMAGE_URL_FORMAT: String = "https://s2.coinmarketcap.com/static/img/coins/32x32/%s.png"
+        val DAY: String = "24h"
+        val WEEK: String = "7d"
+        val HOUR: String = "1h"
+        val SORT_SETTING: String = "sort_setting"
 
         fun newInstance(): HomeFragment {
             return HomeFragment()
@@ -36,6 +46,7 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun init(view: View) {
+        (activity as MainActivity).setSupportActionBar(toolbar)
         setUpDrawer()
         pagerAdapter = HomePagerAdapter(childFragmentManager)
 //        val viewPager = view.findViewById<ViewPager>(R.id.view_pager)
@@ -64,7 +75,7 @@ class HomeFragment : BaseFragment() {
         val t = TextDrawable(context!!)
         t.text = "QPV"
         t.textAlign = Layout.Alignment.ALIGN_CENTER
-        t.setTextColor(Color.BLACK)
+        t.setTextColor(Color.BLUE)
         t.textSize = 10f
         val headerResult = AccountHeaderBuilder()
                 .withActivity(activity!!)
