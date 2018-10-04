@@ -1,6 +1,7 @@
 package com.quanpv.cryptomarket.utils
 
 
+import android.util.Log
 import com.quanpv.cryptomarket.model.CryptoCoin
 import java.util.ArrayList
 import java.util.Collections
@@ -16,139 +17,144 @@ object SortUtil {
         // Name A-Z
             0 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs -> lhs.name!!.compareTo(rhs.name!!) }
         // Market Cap
-            1 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs -> lhs.rank?.toInt()!!.compareTo(rhs.rank!!.toInt()) }
+            1 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs -> lhs.rank?.toFloat()!!.compareTo(rhs.rank!!.toFloat()) }
         // Price
-            2 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            2 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.price_usd == null && rhs.price_usd == null) {
-                    0
+                    Log.i("NULL0", "----->")
+                    return@sort 0
                 }
                 if (lhs.price_usd == null) {
-                    1
+                    Log.i("NULL2", "----->")
+                    return@sort 1
                 }
                 if (rhs.price_usd == null) {
-                    -1
+                    Log.i("NULL2", "----->")
+                    return@sort -1
                 }
-                rhs.price_usd!!.toFloat()!!.compareTo(lhs.price_usd!!.toFloat())
-            })
+                return@sort rhs.price_usd!!.toDouble()!!.compareTo(lhs.price_usd!!.toDouble())
+
+            }
         // Volume 24h
             3 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.day_volume_usd == null && rhs.day_volume_usd == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.day_volume_usd == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.day_volume_usd == null) {
-                    -1
+                    return@sort -1
                 }
-                rhs.day_volume_usd!!.toFloat()!!.compareTo(lhs.day_volume_usd!!.toFloat())
+                return@sort rhs.day_volume_usd!!.toFloat()!!.compareTo(lhs.day_volume_usd!!.toFloat())
             }
         // Change 1h
-            4 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            4 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_1h == null && rhs.percent_change_1h == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_1h == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_1h == null) {
-                    -1
+                    return@sort -1
                 }
-                rhs.percent_change_1h!!.toFloat().compareTo(rhs.percent_change_1h!!.toFloat())
-            })
+                Log.i("percent_change_1h", "----->")
+                return@sort rhs.percent_change_1h!!.toFloat().compareTo(rhs.percent_change_1h!!.toFloat())
+            }
         // Change 24h
-            5 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            5 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_24h == null && rhs.percent_change_24h == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_24h == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_24h == null) {
-                    -1
+                    return@sort -1
                 }
-                rhs.percent_change_24h!!.toFloat().compareTo(rhs.percent_change_24h!!.toFloat())
-            })
+                return@sort rhs.percent_change_24h!!.toFloat().compareTo(rhs.percent_change_24h!!.toFloat())
+            }
         // Change 7d
-            6 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            6 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_7d == null && rhs.percent_change_7d == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_7d == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_7d == null) {
-                    -1
+                    return@sort -1
                 }
-                rhs.percent_change_7d!!.toFloat().compareTo(rhs.percent_change_7d!!.toFloat())
-            })
+                return@sort rhs.percent_change_7d!!.toFloat().compareTo(rhs.percent_change_7d!!.toFloat())
+            }
         // Name Z-A
             7 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs -> rhs.name!!.compareTo(lhs.name!!) }
         // Market Cap LH
             8 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs -> rhs.rank?.toInt()!!.compareTo(lhs.rank!!.toInt()) }
         // Price LH
-            9 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            9 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.price_usd == null && rhs.price_usd == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.price_usd == null || rhs.price_usd == null) {
-                    rhs.rank?.toInt()!!.compareTo(lhs.rank!!.toInt())
+                    return@sort rhs.rank?.toInt()!!.compareTo(lhs.rank!!.toInt())
                 }
-                lhs.price_usd!!.toFloat().compareTo(rhs.price_usd!!.toFloat())
-            })
+                return@sort lhs.price_usd!!.toFloat().compareTo(rhs.price_usd!!.toFloat())
+            }
         // Volume 24h LH
-            10 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            10 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.day_volume_usd == null && rhs.day_volume_usd == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.day_volume_usd == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.day_volume_usd == null) {
-                    -1
+                    return@sort -1
                 }
                 lhs.day_volume_usd!!.toFloat().compareTo(rhs.day_volume_usd!!.toFloat())
-            })
+            }
         // Change 1h LH
-            11 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            11 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_1h == null && rhs.percent_change_1h == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_1h == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_1h == null) {
-                    -1
+                    return@sort -1
                 }
                 lhs.percent_change_1h!!.toFloat().compareTo(rhs.percent_change_1h!!.toFloat())
-            })
+            }
         // Change 24h LH
-            12 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            12 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_24h == null && rhs.percent_change_24h == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_24h == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_24h == null) {
-                    -1
+                    return@sort -1
                 }
-                lhs.percent_change_24h!!.toFloat().compareTo(rhs.percent_change_24h!!.toFloat())
-            })
+                return@sort lhs.percent_change_24h!!.toFloat().compareTo(rhs.percent_change_24h!!.toFloat())
+            }
         // Change 7d LH
-            13 -> Collections.sort<CryptoCoin>(currencyList, { lhs, rhs ->
+            13 -> Collections.sort<CryptoCoin>(currencyList) { lhs, rhs ->
                 if (lhs.percent_change_7d == null && rhs.percent_change_7d == null) {
-                    0
+                    return@sort 0
                 }
                 if (lhs.percent_change_7d == null) {
-                    1
+                    return@sort 1
                 }
                 if (rhs.percent_change_7d == null) {
-                    -1
+                    return@sort -1
                 }
-                lhs.percent_change_7d!!.toFloat().compareTo(rhs.percent_change_7d!!.toFloat())
+                return@sort lhs.percent_change_7d!!.toFloat().compareTo(rhs.percent_change_7d!!.toFloat())
 
-            })
+            }
         }
     }
 

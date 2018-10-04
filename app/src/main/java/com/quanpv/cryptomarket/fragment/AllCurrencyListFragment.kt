@@ -17,6 +17,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.quanpv.cryptomarket.MainActivity
 import com.quanpv.cryptomarket.R
 import com.quanpv.cryptomarket.adapter.AllCurrencyListAdapter
@@ -194,6 +196,34 @@ class AllCurrencyListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshList
             onError {
                 swipe_refresh.isRefreshing = false
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.sort_button -> {
+                val sortType = sharedPreferences?.getInt(SORT_SETTING, 1)
+                MaterialDialog.Builder(mContext!!)
+                        .title(R.string.sort_by)
+                        .items(R.array.sort_options)
+                        .dividerColorRes(R.color.colorPrimary)
+                        .widgetColorRes(R.color.colorPrimary)
+                        .buttonRippleColorRes(R.color.colorPrimary)
+                        .itemsCallbackSingleChoice(sortType!!) { dialog, view, which, text ->
+                            sortList(adapter?.currencyList!!, which)
+                            adapter?.notifyDataSetChanged()
+                            val editor = sharedPreferences?.edit()
+                            editor?.putInt(SORT_SETTING, which)
+                            editor?.apply()
+//                            favsUpdateCallback.performFavsSort()
+                            val toast = Toast.makeText(context, "Sorting by: " + text, Toast.LENGTH_SHORT)
+                            toast.show()
+                            true
+                        }
+                        .show()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 
